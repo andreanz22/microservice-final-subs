@@ -1,0 +1,7 @@
+#create namespace for karsajob env with name karsajobs-ns
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: karsajobs-ns
+  labels:
+    app: karsajobs

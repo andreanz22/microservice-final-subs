@@ -1,0 +1,4 @@
+Github repo: https://github.com/andreanz22/microservice-final-subs.git
+Github repo karsajob: https://github.com/andreanz22/a433-microservices
+Github image frontend: https://github.com/users/andreanz22/packages/container/package/karsajobs-ui
+Github image backend: https://github.com/users/andreanz22/packages/container/package/karsajobs

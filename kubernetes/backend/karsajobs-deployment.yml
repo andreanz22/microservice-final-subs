@@ -1,0 +1,44 @@
+#create deploment for backend with name karsajobs-deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: karsajobs-backend-deployment
+  labels:
+    app: karsajobs
+    tier: backend
+spec:
+  replicas: 1
+  #match selector with name tier: backend
+  selector:
+    matchLabels:
+      tier: backend
+  template:
+    metadata:
+      labels:
+        app: karsajobs
+        tier: backend
+    spec:
+      containers:
+      #get image from github package and give container name karsajob-backend
+      - name: karsajobs-backend
+        image: ghcr.io/andreanz22/karsajobs:latest
+        ports:
+          - containerPort: 8080
+        #set env var value
+        env:
+          - name: APP_PORT
+            value: '8080'
+          - name: MONGO_HOST
+            value: mongodb-service
+          - name: MONGO_USER
+            valueFrom:
+              secretKeyRef:
+                name: mongodb-pass
+                key: MONGO_ROOT_USERNAME
+          - name: MONGO_PASS
+            valueFrom:
+              secretKeyRef:
+                name: mongodb-pass
+                key: MONGO_ROOT_PASSWORD
+      #imagePullSecrets:
+      #- name: regcred

@@ -1,0 +1,13 @@
+#create service for mongodb with name mongodb-service and connect to port 27017 with pod label app: mongodb 
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongodb-service
+  labels:
+    app: mongodb-database
+spec:
+  ports:
+    - port: 27017
+  selector:
+    app: mongodb-database
+  clusterIP: None

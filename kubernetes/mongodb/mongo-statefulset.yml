@@ -1,0 +1,58 @@
+#create mongo statefulset withname mongodb
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: mongodb
+spec:
+  selector:
+    matchLabels:
+      app: mongodb-database
+  serviceName: mongodb-service
+  replicas: 1
+  minReadySeconds: 10
+  template:
+    metadata:
+      labels:
+        app: mongodb-database
+    spec:
+      terminationGracePeriodSeconds: 10
+      #create container with image mongo:latest and given name mongodb
+      containers:
+        - image: mongo:latest
+          name: mongodb
+          #set environment var for credential
+          env:
+            - name: MONGO_INITDB_ROOT_USERNAME_FILE
+              value: /etc/mongo-credentials/MONGO_ROOT_USERNAME
+            - name: MONGO_INITDB_ROOT_PASSWORD_FILE
+              value: /etc/mongo-credentials/MONGO_ROOT_PASSWORD
+          #set port for mongo
+          ports:
+            - containerPort: 27017
+              name: mongodb
+          #set the mount directory          
+          volumeMounts:
+            - name: mongodb-persistent-storage
+              mountPath: /data/db
+            - name: mongodb-configmap
+              mountPath: /config
+              readOnly: true
+            - name: mongodb-credentials
+              mountPath: /etc/mongo-credentials
+      #set the valuemunts directory goes to desired value
+      volumes:
+        #set directory /data/db mount from pv
+        - name: mongodb-persistent-storage
+          persistentVolumeClaim:
+            claimName: mongodb-pvc
+        #set directory config mount from mongodb-config configmap
+        - name: mongodb-configmap
+          configMap:
+            name: mongodb-config
+            items:
+              - key: mongo.conf
+                path: mongo.conf
+        #set mongo.conf and get value from mongodb-secret 
+        - name: mongodb-credentials
+          secret:
+            secretName: mongodb-pass
