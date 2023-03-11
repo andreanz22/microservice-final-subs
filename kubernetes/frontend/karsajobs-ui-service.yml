@@ -1,3 +1,4 @@
+#create service for frontend with name karsajobs-ui-service
 apiVersion: v1
 kind: Service
 metadata:
@@ -5,6 +6,7 @@ metadata:
   labels:
     app: karsajobs
 spec:
+  #set selector label tier:frontend
   selector:
     tier: frontend
   ports:

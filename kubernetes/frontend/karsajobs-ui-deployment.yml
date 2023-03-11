@@ -1,3 +1,4 @@
+#create depolyment for frontend with name karsajobs-ui-deployment
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -17,11 +18,13 @@ spec:
         tier: frontend
     spec:
       containers:
+      #get image fron github package
       - name: karsajobs-frontend
         image: ghcr.io/andreanz22/karsajobs-ui:latest
         ports:
           - containerPort: 8000
         env:
+      #set the env value
           - name: VUE_APP_BACKEND
             value: "http://192.168.49.2:32282/"
       #imagePullSecrets:
